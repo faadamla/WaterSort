@@ -29,7 +29,7 @@ int main()
 	t2.print();
 	t3.print();
 
-	cout << endl << "====================================" << endl;
+	cout << endl << "===================types_of_tubes:=================" << endl;
 
 	for (auto ar : t2.types_of_tubes()) {
 		for (auto v : ar) {
@@ -37,6 +37,21 @@ int main()
 		}
 		cout << endl;
 	}
+
+	cout << endl << "===================types_map:=================" << endl;
+
+	Tube<5> t_test;
+	for (auto& [key, value] : t_test.type_map()) {
+		for (auto v : key) {
+			printf("%d, ", v);
+		}
+		cout << ": " << value << "\n";
+	}
+
+	cout << endl << "===================my_type:=================" << endl;
+	Tube<4> my_type_test({ 3, 0,0,0 });
+	my_type_test.print();
+	cout << "my_type: " << my_type_test.my_type();
 
 
 	//std:array<int, 3> a{ 0,1, 2 };

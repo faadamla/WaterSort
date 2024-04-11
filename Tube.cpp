@@ -1,6 +1,8 @@
 #include <array>
 #include <iostream>
 #include <vector>
+#include <map>
+#include <ranges>
 
 using uc = unsigned char;
 
@@ -67,6 +69,9 @@ public:
 	uc top_zeros;
 	uc top_color_depth;
 	bool correct;
+	Tube(){
+		Tube(std::array<uc, N> {});
+	}
 	Tube(std::array<uc, N> elements): elements(elements), size(N) {
 		this->update();
 	}
@@ -91,9 +96,48 @@ public:
 		}
 		std::cout << std::endl;
 	}
-	const static std::vector<std::array<uc, N>> types_of_tubes() {
+	constexpr std::vector<std::array<uc, N>> types_of_tubes() {
 		return types_of_tubes(N-1);
 	}
+	constexpr std::map<std::array<uc, N>, int> type_map() {
+		std::map<std::array<uc, N>, int> my_map;
+		std::array<uc, N> my_array{};
+		std::fill(my_array.begin(), my_array.end(), 1);
+		my_map.emplace(my_array, 0);
+		int i = 0;
+		for (auto arr : types_of_tubes()) {
+			if (my_map.contains(arr)) { continue; }
+			else {
+				my_map.emplace(arr, ++i);
+			}
+		}
+
+		return my_map;
+	}
+	int my_type() {
+		std::map<uc, uc> recoloring_map{ {0,0} };
+		std::array<uc, N> recolored_elemets;
+		uc next_color = 1;
+		uc old_c;
+		for (uc i = 0; i < N; i++) {
+			old_c = elements.at(i);
+			if (recoloring_map.contains(old_c)) {
+				recolored_elemets.at(i) = recoloring_map[old_c];
+			}
+			else {
+				recolored_elemets.at(i) = next_color;
+				recoloring_map[old_c] = next_color++;
+
+			}
+		}
+		return type_map()[recolored_elemets];
+	}
+	bool operator<(const Tube<N>& r)
+	{
+		return std::tie(l.name, l.floor, l.weight)
+			< std::tie(r.name, r.floor, r.weight); // keep the same order
+	}
+
 	bool can_pour_to(const Tube<N> &to_tube) const {
 		/*
 		One can pour, if
@@ -136,4 +180,5 @@ public:
 		t1.try_pour(t2);
 		return { t1, t2 };
 	}
+
 };
