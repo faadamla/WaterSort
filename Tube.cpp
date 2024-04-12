@@ -96,16 +96,16 @@ public:
 		}
 		std::cout << std::endl;
 	}
-	constexpr std::vector<std::array<uc, N>> types_of_tubes() {
+	constexpr std::vector<std::array<uc, N>> types_of_tubes() const {
 		return types_of_tubes(N-1);
 	}
-	constexpr std::map<std::array<uc, N>, int> type_map() {
+	constexpr std::map<std::array<uc, N>, int> type_map() const {
 		std::map<std::array<uc, N>, int> my_map;
 		std::array<uc, N> my_array{};
 		std::fill(my_array.begin(), my_array.end(), 1);
 		my_map.emplace(my_array, 0);
 		int i = 0;
-		for (auto arr : types_of_tubes()) {
+		for (auto&& arr : types_of_tubes()) {
 			if (my_map.contains(arr)) { continue; }
 			else {
 				my_map.emplace(arr, ++i);
@@ -114,7 +114,7 @@ public:
 
 		return my_map;
 	}
-	int my_type() {
+	int my_type() const {
 		std::map<uc, uc> recoloring_map{ {0,0} };
 		std::array<uc, N> recolored_elemets;
 		uc next_color = 1;
@@ -132,10 +132,9 @@ public:
 		}
 		return type_map()[recolored_elemets];
 	}
-	bool operator<(const Tube<N>& r)
+	bool operator<(const Tube<N>& r) const
 	{
-		return std::tie(l.name, l.floor, l.weight)
-			< std::tie(r.name, r.floor, r.weight); // keep the same order
+		return this->my_type() < r.my_type();
 	}
 
 	bool can_pour_to(const Tube<N> &to_tube) const {

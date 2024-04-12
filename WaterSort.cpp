@@ -1,7 +1,4 @@
-﻿// WaterSort.cpp : Defines the entry point for the application.
-//
-
-#include "WaterSort.h"
+﻿#include <iostream>
 #include "Tube.cpp"
 
 using namespace std;
@@ -52,6 +49,9 @@ int main()
 	Tube<4> my_type_test({ 3, 0,0,0 });
 	my_type_test.print();
 	cout << "my_type: " << my_type_test.my_type();
+
+	cout << endl << "===================Comparison test:=================" << endl;
+	cout << "Compare: " << (Tube<4>({ 1,2,3,4 }) < Tube<4>({ 1, 1, 1, 1 }));
 
 
 	//std:array<int, 3> a{ 0,1, 2 };
