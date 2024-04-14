@@ -72,6 +72,12 @@ public:
 	Tube(){
 		Tube(std::array<uc, N> {});
 	}
+	Tube(Tube<N>& ob): elements(ob.elements), size(N) {
+		this->update();
+	}
+	Tube(const Tube<N>& ob) : elements(ob.elements), size(N) {
+		this->update();
+	}
 	Tube(std::array<uc, N> elements): elements(elements), size(N) {
 		this->update();
 	}
@@ -87,7 +93,7 @@ public:
 		printf("top_color_depth = %d\n", top_color_depth);
 		printf("correct: %s\n\n", correct ? "true" : "false");
 	}
-	void print() {
+	void print()const {
 		for (int i = 0; i < elements.size(); i++) {
 			printf("%d", elements[i]);
 			if (i < elements.size() - 1) {
@@ -95,6 +101,9 @@ public:
 			}
 		}
 		std::cout << std::endl;
+	}
+	void print() {
+		return const_cast<const Tube<N>*>(this)->print();
 	}
 	constexpr std::vector<std::array<uc, N>> types_of_tubes() const {
 		return types_of_tubes(N-1);
