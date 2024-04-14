@@ -41,13 +41,23 @@ public:
 		for (uc i = 0; i < numberOfTubes; i++) {
 			for (uc j = 0; j < depthOfTube; j++) {
 				if (tubes[i].elements[j] == rhs.tubes[i].elements[j]) continue;
-				if (tubes[i].elements[j] < rhs.tubes[i].elements[j]) return true;
-				if (tubes[i].elements[j] > rhs.tubes[i].elements[j]) return false;
+				else if (tubes[i].elements[j] < rhs.tubes[i].elements[j]) return true;
+				else if (tubes[i].elements[j] > rhs.tubes[i].elements[j]) return false;
 			}
 		}
+
+		return false;
 	}
 	bool operator==(const State<numberOfTubes, depthOfTube>& rhs) const {
+		for (uc i = 0; i < numberOfTubes; i++) {
+			for (uc j = 0; j < depthOfTube; j++) {
+				if (tubes[i].elements[j] == rhs.tubes[i].elements[j]) continue;
+				else if (tubes[i].elements[j] < rhs.tubes[i].elements[j]) return false;
+				else if (tubes[i].elements[j] > rhs.tubes[i].elements[j]) return false;
+			}
+		}
 
+		return true;
 	}
 	std::vector<std::pair<uc, uc>> possibleMoves()const {
 		std::vector<std::pair<uc, uc>> moves;
