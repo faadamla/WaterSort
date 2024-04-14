@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include "Tube.cpp"
+#include "State.cpp"
 
 using namespace std;
 
@@ -51,7 +51,26 @@ int main()
 	cout << "my_type: " << my_type_test.my_type();
 
 	cout << endl << "===================Comparison test:=================" << endl;
-	cout << "Compare: " << (Tube<4>({ 1,2,3,4 }) < Tube<4>({ 1, 1, 1, 1 }));
+	cout << "Compare: " << (Tube<4>({ 1, 1, 1, 1 }) < Tube<4>({ 1,2,3,4 }));
+
+	cout << endl << "\n\n===================Game::possibleMoves test:=================" << endl;
+	State<4, 4> TestGame1({ 1,1,2,0,1,1,2,0,2,2,0,0,3,3,3,3 });
+	TestGame1.print();
+	auto&& moves = TestGame1.possibleMoves();
+	for (auto&& m : moves) {
+		printf("%d -> %d\n", m.first, m.second);
+	}
+
+	cout << endl << "\n\n===================Game::discoverAllStatesFromInitialState test:=================" << endl;
+	State<3, 4> TestGame2({ 1,2,1,2,1,1,2,2,0,0,0,0 });
+	TestGame2.print();
+	for (auto&& s : TestGame2.discoverAllStatesFromInitialState()) {
+		s.print();
+		cout<<endl;
+	}
+
+
+	std::map<int, double> my_map{ {1,11.0}, {2,22.0} };
 
 
 	//std:array<int, 3> a{ 0,1, 2 };
