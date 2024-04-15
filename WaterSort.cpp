@@ -62,13 +62,36 @@ int main()
 	}
 
 	cout << endl << "\n\n===================Game::discoverAllStatesFromInitialState test:=================" << endl;
-	State<3, 4> TestGame2({ 1,2,1,2,1,1,2,2,0,0,0,0 });
+	const State<4, 4> TestGame2({ 1,2,1,2,1,3,3,2,1,2,3,3,0,0,0,0 });
 	TestGame2.print();
-	for (auto&& s : TestGame2.discoverAllStatesFromInitialState()) {
+	auto && allDiscovered = discoverAllStatesFromInitialState(TestGame2);
+	for (auto&& s : allDiscovered) {
+		// s.print();
+		// cout<<endl;
+	}
+	cout <<"Total: "<<allDiscovered.size()<<endl;
+
+	cout << endl << "\n\n===================Game::recolorInPlace test:=================" << endl;
+	State<3, 4> TestGame3({ 3,1,3,1,2,2,2,2,0,0,0,0 });
+	cout <<"Before:\n";
+	TestGame3.print();
+	cout<<"After sort:\n";
+	auto TestGame4 = TestGame3;
+	TestGame4.sortTubesInPlace();
+	TestGame4.print();
+	cout<<"After recolor:\n";
+	TestGame4 = TestGame3;
+	TestGame4.reColorInPlace();
+	TestGame4.print();
+
+	cout << endl << "\n\n===================Game::discoverAllNonEquivalenStatesFromInitialState test:=================" << endl;
+	TestGame2.print();
+	allDiscovered = discoverAllNonEquivalenStatesFromInitialState(TestGame2);
+	for (auto&& s : allDiscovered) {
 		s.print();
 		cout<<endl;
 	}
-
+	cout <<"Total: "<<allDiscovered.size()<<endl;
 
 	std::map<int, double> my_map{ {1,11.0}, {2,22.0} };
 

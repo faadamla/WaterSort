@@ -52,14 +52,13 @@ public:
 		for (uc i = 0; i < numberOfTubes; i++) {
 			for (uc j = 0; j < depthOfTube; j++) {
 				if (tubes[i].elements[j] == rhs.tubes[i].elements[j]) continue;
-				else if (tubes[i].elements[j] < rhs.tubes[i].elements[j]) return false;
-				else if (tubes[i].elements[j] > rhs.tubes[i].elements[j]) return false;
+				else return false;
 			}
 		}
 
 		return true;
 	}
-	std::vector<std::pair<uc, uc>> possibleMoves()const {
+	std::vector<std::pair<uc, uc>> possibleMoves() const {
 		std::vector<std::pair<uc, uc>> moves;
 		Tube<depthOfTube> fromTube, toTube;
 		for (uc ifrom = 0; ifrom < numberOfTubes; ifrom++) {
@@ -73,22 +72,57 @@ public:
 
 		return moves;
 	}
-	std::vector < State<numberOfTubes, depthOfTube>> possibleNextStates(){
-		State<numberOfTubes, depthOfTube> copy_current = *this;
+	std::vector < State<numberOfTubes, depthOfTube>> possibleNextStates() const;
+
+	void sortTubesInPlace(){
+		std::sort(tubes.begin(), tubes.end());
+	}
+	void reColorInPlace(){
+		std::map<uc, uc> colormap{{0,0}};
+		uc lastassignedcolor=0;
+		for (auto& t : tubes){
+			for (auto& e: t.elements){
+				if (!colormap.contains(e)){
+					colormap[e] = ++lastassignedcolor;
+				}
+				e = colormap.at(e);
+			}
+		}
+	}
+	State<numberOfTubes, depthOfTube> getEquivalentState() const{
+		State<numberOfTubes, depthOfTube> stateCopy = *this;
+		stateCopy.sortTubesInPlace();
+		stateCopy.reColorInPlace();
+		return stateCopy;
+	}
+
+
+};
+
+template<uc numberOfTubes, uc depthOfTube>
+std::vector < State<numberOfTubes, depthOfTube>> possibleNextStates(const State<numberOfTubes, depthOfTube>& initialState){
+		State<numberOfTubes, depthOfTube> copy_current = initialState;
 		std::vector < State<numberOfTubes, depthOfTube>> nextStates{};
-		for (auto&& [from, to] : this->possibleMoves()) {
-			auto&& [afterfrom, afterto] = tubes[from].after_pour(tubes[to]);
+		for (auto&& [from, to] : initialState.possibleMoves()) {
+			auto&& [afterfrom, afterto] = initialState.tubes[from].after_pour(initialState.tubes[to]);
 			copy_current.tubes[from] = afterfrom;
 			copy_current.tubes[to] = afterto;
 			nextStates.emplace_back(copy_current);
-			copy_current = *this;
+			copy_current = initialState;
 		}
 		return nextStates;
 	}
-	std::set<State<numberOfTubes, depthOfTube>> discoverAllStatesFromInitialState() {
+
+template<uc numberOfTubes, uc depthOfTube>
+std::vector < State<numberOfTubes, depthOfTube>> State<numberOfTubes, depthOfTube>::possibleNextStates() const {
+	return ::possibleNextStates(*this);
+}
+
+template<uc numberOfTubes, uc depthOfTube>
+std::set<State<numberOfTubes, depthOfTube>> discoverAllStatesFromInitialState(const State<numberOfTubes, depthOfTube>& initialState) {
 		std::set<State<numberOfTubes, depthOfTube>> discoveredStates{};
 		std::list<State<numberOfTubes, depthOfTube>> todiscover{};
-		todiscover.push_back(*this);
+		todiscover.push_back(initialState);
 		State<numberOfTubes, depthOfTube> currentState;
 		for (; !todiscover.empty(); todiscover.pop_front()) {
 			currentState = todiscover.front();
@@ -106,4 +140,27 @@ public:
 		}
 		return discoveredStates;
 	}
-};
+
+template<uc numberOfTubes, uc depthOfTube>
+std::set<State<numberOfTubes, depthOfTube>> discoverAllNonEquivalenStatesFromInitialState(const State<numberOfTubes, depthOfTube>& initialState) {
+		std::set<State<numberOfTubes, depthOfTube>> discoveredStates{};
+		std::list<State<numberOfTubes, depthOfTube>> todiscover{};
+		todiscover.push_back(initialState.getEquivalentState());
+		State<numberOfTubes, depthOfTube> currentState;
+		for (; !todiscover.empty(); todiscover.pop_front()) {
+			currentState = todiscover.front();
+			if (discoveredStates.contains(currentState)) {
+				continue;
+			}
+			else {
+				for (auto&& newState : currentState.possibleNextStates()) {
+					newState = newState.getEquivalentState();
+					if (!discoveredStates.contains(newState)) {
+						todiscover.push_back(newState);
+					}
+				}
+				discoveredStates.insert(currentState);
+			}
+		}
+		return discoveredStates;
+	}

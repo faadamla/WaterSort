@@ -49,17 +49,18 @@ private:
 					}
 				}
 			}
-			return return_vec;
 		}
-		else if (i == 0) {
+		else {
 			std::array<uc, N> ar1, ar2;
 			for (int i = 0; i < N; i++) {
 				ar1[i] = 0;
 				ar2[i] = 0;
 			}
 			ar2[0] = 1;
-			return { ar1, ar2 };
+			return_vec = { ar1, ar2 };
 		}
+
+		return return_vec;
 	}
 	
 public:
