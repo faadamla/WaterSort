@@ -116,29 +116,6 @@ std::vector < State<numberOfTubes, depthOfTube>> State<numberOfTubes, depthOfTub
 }
 
 template<uc numberOfTubes, uc depthOfTube>
-std::set<State<numberOfTubes, depthOfTube>> discoverAllStatesFromInitialState(const State<numberOfTubes, depthOfTube>& initialState) {
-		std::set<State<numberOfTubes, depthOfTube>> discoveredStates{};
-		std::list<State<numberOfTubes, depthOfTube>> todiscover{};
-		todiscover.push_back(initialState);
-		State<numberOfTubes, depthOfTube> currentState;
-		for (; !todiscover.empty(); todiscover.pop_front()) {
-			currentState = todiscover.front();
-			if (discoveredStates.contains(currentState)) {
-				continue;
-			}
-			else {
-				for (auto&& newState : currentState.possibleNextStates()) {
-					if (!discoveredStates.contains(newState)) {
-						todiscover.push_back(newState);
-					}
-				}
-				discoveredStates.insert(currentState);
-			}
-		}
-		return discoveredStates;
-	}
-
-template<uc numberOfTubes, uc depthOfTube>
 std::set<State<numberOfTubes, depthOfTube>> discoverAllNonEquivalenStatesFromInitialState(const State<numberOfTubes, depthOfTube>& initialState) {
 		std::set<State<numberOfTubes, depthOfTube>> discoveredStates{};
 		std::list<State<numberOfTubes, depthOfTube>> todiscover{};
