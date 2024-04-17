@@ -9,6 +9,7 @@ class State {
 private:
 public:
 	bool won;
+
 	std::array<Tube<depthOfTube>, numberOfTubes> tubes;
 	State(std::array<uc, depthOfTube*numberOfTubes> longArray) {
 		std::array<uc, depthOfTube> _array;
@@ -20,6 +21,13 @@ public:
 		}
 		won = false;
 	}
+	State() {
+		for (uc i = 0; i < numberOfTubes; i++) {
+			tubes[i] = Tube<depthOfTube>();
+		}
+		won = false;
+	}
+	
 	void print() const {
 		for (uc i = 0; i < numberOfTubes; i++) {
 			printf("%d: ", i);
@@ -30,50 +38,7 @@ public:
 	void print() {
 		return const_cast<const State<numberOfTubes, depthOfTube>*>(this)->print();
 	}
-	State() {
-		for (uc i = 0; i < numberOfTubes; i++) {
-			tubes[i] = Tube<depthOfTube>();
-		}
-		won = false;
-	}
-	bool operator<(const State<numberOfTubes, depthOfTube> &rhs) const
-	{
-		for (uc i = 0; i < numberOfTubes; i++) {
-			for (uc j = 0; j < depthOfTube; j++) {
-				if (tubes[i].elements[j] == rhs.tubes[i].elements[j]) continue;
-				else if (tubes[i].elements[j] < rhs.tubes[i].elements[j]) return true;
-				else if (tubes[i].elements[j] > rhs.tubes[i].elements[j]) return false;
-			}
-		}
-
-		return false;
-	}
-	bool operator==(const State<numberOfTubes, depthOfTube>& rhs) const {
-		for (uc i = 0; i < numberOfTubes; i++) {
-			for (uc j = 0; j < depthOfTube; j++) {
-				if (tubes[i].elements[j] == rhs.tubes[i].elements[j]) continue;
-				else return false;
-			}
-		}
-
-		return true;
-	}
-	std::vector<std::pair<uc, uc>> possibleMoves() const {
-		std::vector<std::pair<uc, uc>> moves;
-		Tube<depthOfTube> fromTube, toTube;
-		for (uc ifrom = 0; ifrom < numberOfTubes; ifrom++) {
-			for (uc ito = 0; ito < numberOfTubes; ito++) {
-				if (tubes[ifrom].can_pour_to(tubes[ito])) {
-					moves.emplace_back(std::pair<uc, uc>({ ifrom, ito }));
-				}
-			}
-
-		}
-
-		return moves;
-	}
-	std::vector < State<numberOfTubes, depthOfTube>> possibleNextStates() const;
-
+	
 	void sortTubesInPlace(){
 		std::sort(tubes.begin(), tubes.end());
 	}
@@ -93,8 +58,41 @@ public:
 		State<numberOfTubes, depthOfTube> stateCopy = *this;
 		stateCopy.sortTubesInPlace();
 		stateCopy.reColorInPlace();
+		stateCopy.sortTubesInPlace();
 		return stateCopy;
 	}
+	short int operator<=>(const State<numberOfTubes, depthOfTube>& rhs) const {
+		auto lhsOrderedRecolored = *this;
+		lhsOrderedRecolored.getEquivalentState();
+		auto rhsOrderedRecolored = rhs;
+		rhsOrderedRecolored.getEquivalentState();
+		Tube<depthOfTube> lhstube, rhstube;
+		for (uc i = 0; i < numberOfTubes; i++) {
+			lhstube = lhsOrderedRecolored.tubes[i];
+			rhstube = rhsOrderedRecolored.tubes[i];
+			if (lhstube < rhstube) {return 1;}
+			else if (lhstube > rhstube) {return -1;}
+		}
+		return 0;
+	}
+	
+	std::vector<std::pair<uc, uc>> possibleMoves() const {
+		std::vector<std::pair<uc, uc>> moves;
+		Tube<depthOfTube> fromTube, toTube;
+		for (uc ifrom = 0; ifrom < numberOfTubes; ifrom++) {
+			for (uc ito = 0; ito < numberOfTubes; ito++) {
+				if (tubes[ifrom].can_pour_to(tubes[ito])) {
+					moves.emplace_back(std::pair<uc, uc>({ ifrom, ito }));
+				}
+			}
+
+		}
+
+		return moves;
+	}
+	std::vector < State<numberOfTubes, depthOfTube>> possibleNextStates() const;
+
+	
 
 
 };
@@ -112,7 +110,6 @@ std::vector < State<numberOfTubes, depthOfTube>> possibleNextStates(const State<
 		}
 		return nextStates;
 	}
-
 template<uc numberOfTubes, uc depthOfTube>
 std::vector < State<numberOfTubes, depthOfTube>> State<numberOfTubes, depthOfTube>::possibleNextStates() const {
 	return ::possibleNextStates(*this);

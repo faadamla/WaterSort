@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include "State.cpp"
+#include "Game.cpp"
 
 using namespace std;
 

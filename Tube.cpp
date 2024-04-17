@@ -142,10 +142,23 @@ public:
 		}
 		return type_map()[recolored_elemets];
 	}
-	bool operator<(const Tube<N>& r) const
-	{
-		return this->my_type() < r.my_type();
+	// bool operator<(const Tube<N>& r) const
+	// {
+	// 	return this->my_type() < r.my_type();
+	// }
+	short int operator<=>(const Tube<N> &r) const {
+		if (this->my_type() < r.my_type()) {return 1;}
+		else if (this->my_type() > r.my_type()) {return -1;}
+		else { //Same types
+			for(uc i=0; i<N; i++){
+				if (this->elements[i] < r.elements[i]) {return 1;}
+				else if (this->elements[i] > r.elements[i]) {return -1;}
+			}
+			//All elements are equal:
+			return 0;
+		}
 	}
+
 
 	bool can_pour_to(const Tube<N> &to_tube) const {
 		/*
