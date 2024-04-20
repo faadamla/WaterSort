@@ -89,5 +89,15 @@ int main()
 	cout << endl << "\n\n===================Game::factorial test:=================" << endl;
 	cout << "10!=" << factorial(10) <<endl;
 
+	cout << endl << "\n\n===================Game::numberOfInitialStates test:=================" << endl;
+	cout << "Estimated number of unique Initial state for <6,4>" << numberOfInitialStates(6,4) <<endl;
+
+
+	cout << endl << "\n\n===================Game::allUniqueInitialState test:=================" << endl;
+	auto InitialStatesSet = allUniqueInitialState<6,4>();
+	cout << "Number of unique Initial state for <6,4>" << InitialStatesSet.size() <<endl;
+
+
+
 	return 0;
 }
