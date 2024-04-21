@@ -52,7 +52,7 @@ std::set<State<NumberOfTubes,  DepthOfTube>> allUniqueInitialState(uc empty=2){
         resutVector = generateStates_fillIndex_v1<NumberOfTubes, DepthOfTube>(i, empty, resutVector);
     }
     auto size = resutVector.size();
-    std::cout << "Initial vector size is: " << size;
+    std::cout << "Initial vector size is: " << size <<std::endl;
     std::set<State<NumberOfTubes,  DepthOfTube>> resultSet{};
     unsigned short int j=0;
     for(auto&& arr: resutVector){

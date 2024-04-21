@@ -26,19 +26,18 @@ int main()
 	t2.print();
 	t3.print();
 
-	cout << endl << "===================types_of_tubes:=================" << endl;
+	// cout << endl << "===================types_of_tubes:=================" << endl;
 
-	for (auto ar : t2.types_of_tubes()) {
-		for (auto v : ar) {
-			printf("%d, ", v);
-		}
-		cout << endl;
-	}
+	// for (auto ar : t2.types_of_tubes()) {
+	// 	for (auto v : ar) {
+	// 		printf("%d, ", v);
+	// 	}
+	// 	cout << endl;
+	// }
 
 	cout << endl << "===================types_map:=================" << endl;
 
-	Tube<5> t_test;
-	for (auto& [key, value] : t_test.type_map()) {
+	for (auto& [key, value] : type_map<5>) {
 		for (auto v : key) {
 			printf("%d, ", v);
 		}
@@ -88,14 +87,19 @@ int main()
 
 	cout << endl << "\n\n===================Game::factorial test:=================" << endl;
 	cout << "10!=" << factorial(10) <<endl;
+	cout << "20!=" << factorial(20) <<endl;
+	cout << "21!=" << factorial(21) <<endl;
 
 	cout << endl << "\n\n===================Game::numberOfInitialStates test:=================" << endl;
-	cout << "Estimated number of unique Initial state for <6,4>" << numberOfInitialStates(6,4) <<endl;
+	cout << "Estimated number of unique Initial state for\n";
+	for (int numTubes=3; numTubes<11; numTubes++){
+		cout << "<"<<numTubes<<",4>: " << numberOfInitialStates(numTubes,4) <<endl;
+	}
 
 
 	cout << endl << "\n\n===================Game::allUniqueInitialState test:=================" << endl;
 	auto InitialStatesSet = allUniqueInitialState<6,4>();
-	cout << "Number of unique Initial state for <6,4>" << InitialStatesSet.size() <<endl;
+	cout << "Number of unique Initial state for <6,4>: " << InitialStatesSet.size() <<endl;
 
 
 
