@@ -13,12 +13,11 @@ std::vector<std::array<uc, N>> types_of_tubes(uc i)  {
 			for (const auto& ar : types_of_tubes<N>(i - 1)) {
 				if (*(std::min_element(ar.begin(), ar.begin() + i)) == 0) { //If it has zero, can only be continued with zeros
 					return_vec.emplace_back(ar);
-					continue;
 				}
 				else {
 					uc max_element = *(std::max_element(ar.begin(), ar.begin() + i)); //Max element before index i 
+					auto my_array = ar;
 					for (uc new_element = 0; new_element <= max_element + 1; new_element++) {
-						auto my_array = ar;
 						my_array[i] = new_element;
 						return_vec.emplace_back(my_array);
 					}
@@ -27,10 +26,8 @@ std::vector<std::array<uc, N>> types_of_tubes(uc i)  {
 		}
 		else {
 			std::array<uc, N> ar1, ar2;
-			for (int i = 0; i < N; i++) {
-				ar1[i] = 0;
-				ar2[i] = 0;
-			}
+			std::fill(ar1.begin(), ar1.end(), 0);
+			std::fill(ar2.begin(), ar2.end(), 0);
 			ar2[0] = 1;
 			return_vec = { ar1, ar2 };
 		}
@@ -39,7 +36,7 @@ std::vector<std::array<uc, N>> types_of_tubes(uc i)  {
 	}
 template<uc N>
 std::map<std::array<uc, N>, int> get_type_map()  {
-		std::map<std::array<uc, N>, int> my_map;
+		std::map<std::array<uc, N>, int> my_map{};
 		std::array<uc, N> my_array{};
 		std::fill(my_array.begin(), my_array.end(), 1);
 		my_map.emplace(my_array, 0);
@@ -60,6 +57,25 @@ static const auto type_map = get_type_map<N>();
 template<uc N>
 class Tube{
 private:
+	const int my_type() const {
+		std::map<uc, uc> recoloring_map{ {0,0} };
+		std::array<uc, N> recolored_elemets;
+		uc next_color = 1;
+		uc old_c;
+		for (uc i = 0; i < N; i++) {
+			old_c = elements.at(i);
+			if (recoloring_map.contains(old_c)) {
+				recolored_elemets.at(i) = recoloring_map[old_c];
+			}
+			else {
+				recolored_elemets.at(i) = next_color;
+				recoloring_map[old_c] = next_color++;
+
+			}
+		}
+		return type_map<N>.at(recolored_elemets);
+	}
+	
 	void update() {
 		top_color = elements[0];
 		top_color_depth = 0;
@@ -81,6 +97,8 @@ private:
 				had_zero = true;
 			}
 		}
+
+		type = my_type();
 	}
 
 public:
@@ -90,6 +108,7 @@ public:
 	uc top_zeros;
 	uc top_color_depth;
 	bool correct;
+	int type;
 	Tube(){
 		Tube(std::array<uc, N> {});
 	}
@@ -126,39 +145,15 @@ public:
 	void print() {
 		return const_cast<const Tube<N>*>(this)->print();
 	}
-	const int my_type() const {
-		std::map<uc, uc> recoloring_map{ {0,0} };
-		std::array<uc, N> recolored_elemets;
-		uc next_color = 1;
-		uc old_c;
-		for (uc i = 0; i < N; i++) {
-			old_c = elements.at(i);
-			if (recoloring_map.contains(old_c)) {
-				recolored_elemets.at(i) = recoloring_map[old_c];
-			}
-			else {
-				recolored_elemets.at(i) = next_color;
-				recoloring_map[old_c] = next_color++;
-
-			}
-		}
-		return type_map<N>.at(recolored_elemets);
-	}
-	// bool operator<(const Tube<N>& r) const
-	// {
-	// 	return this->my_type() < r.my_type();
-	// }
 	short int operator<=>(const Tube<N> &r) const {
-		if (this->my_type() < r.my_type()) {return 1;}
-		else if (this->my_type() > r.my_type()) {return -1;}
+		if (this->type < r.type) {return 1;}
+		else if (this->type > r.type) {return -1;}
 		else { //Same types
-			for(uc i=0; i<N; i++){
-				if (this->elements[i] < r.elements[i]) {return 1;}
-				else if (this->elements[i] > r.elements[i]) {return -1;}
+			if (this->elements < r.elements) {return 1;}
+			else if (this->elements > r.elements) {return -1;}
 			}
 			//All elements are equal:
-			return 0;
-		}
+		return 0;
 	}
 
 

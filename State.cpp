@@ -62,18 +62,11 @@ public:
 		return stateCopy;
 	}
 	short int operator<=>(const State<numberOfTubes, depthOfTube>& rhs) const {
-		auto lhsOrderedRecolored = *this;
-		lhsOrderedRecolored.getEquivalentState();
-		auto rhsOrderedRecolored = rhs;
-		rhsOrderedRecolored.getEquivalentState();
-		Tube<depthOfTube> lhstube, rhstube;
-		for (uc i = 0; i < numberOfTubes; i++) {
-			lhstube = lhsOrderedRecolored.tubes[i];
-			rhstube = rhsOrderedRecolored.tubes[i];
-			if (lhstube < rhstube) {return 1;}
-			else if (lhstube > rhstube) {return -1;}
-		}
-		return 0;
+		auto lhsOrderedRecolored = this->getEquivalentState();
+		auto rhsOrderedRecolored = rhs.getEquivalentState();
+		if (lhsOrderedRecolored.tubes < rhsOrderedRecolored.tubes) {return 1;}
+		else if (lhsOrderedRecolored.tubes > rhsOrderedRecolored.tubes) {return -1;}
+		else {return 0;}
 	}
 	
 	std::vector<std::pair<uc, uc>> possibleMoves() const {

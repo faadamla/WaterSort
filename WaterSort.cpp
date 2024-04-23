@@ -47,7 +47,7 @@ int main()
 	cout << endl << "===================my_type:=================" << endl;
 	Tube<4> my_type_test({ 3, 0,0,0 });
 	my_type_test.print();
-	cout << "my_type: " << my_type_test.my_type();
+	cout << "my_type: " << my_type_test.type;
 
 	cout << endl << "===================Tube Comparison test:=================" << endl;
 	cout << "Compare: " << (Tube<4>({ 1, 1, 1, 1 }) < Tube<4>({ 1,2,3,4 }));
