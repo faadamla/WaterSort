@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <ostream>
 #include <map>
@@ -43,5 +45,3 @@ private:
 	unsigned char top_color;
 	size_t type;
 };
-
-std::ostream& operator<<(std::ostream& os, Tube const& tube);

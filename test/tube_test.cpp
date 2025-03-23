@@ -1,14 +1,14 @@
 #include <gtest/gtest.h>
 #include "Tube.h"
 
-TEST(Happy, pass){
+TEST(Happy, pass) {
 	EXPECT_EQ(1, 1);
 }
 
 TEST(Tube, constructor) {
 	std::vector<unsigned char> a{ 1, 2, 3, 4, 5 };
 	Tube ta{ a };
-	EXPECT_EQ(5, 5);
+	EXPECT_EQ(ta.size(), 5);
 }
 
 TEST(Tube, valid) {
@@ -83,18 +83,18 @@ TEST(Tube, all_types) {
 }
 
 TEST(Tube, type) {
-	std::vector<unsigned char> a{ 0, 0, 0, 0};
-	std::vector<unsigned char> b{ 3, 3, 3, 3};
-	std::vector<unsigned char> c{ 1, 2, 3, 4};
-	std::vector<unsigned char> b2{ 4,4,4,4 };
-	std::vector<unsigned char> c2{ 7,1,5,4 };
+	std::vector<unsigned char> a{ 0, 0, 0, 0 };
+	std::vector<unsigned char> b{ 3, 3, 3, 3 };
+	std::vector<unsigned char> c{ 1, 2, 3, 4 };
+	std::vector<unsigned char> b2{ 4, 4, 4, 4 };
+	std::vector<unsigned char> c2{ 7, 1, 5, 4 };
 	Tube ta{ a };
 	Tube tb{ b };
 	Tube tc{ c };
 	Tube tb2{ b2 };
 	Tube tc2{ c2 };
-	EXPECT_EQ(tb.get_type(), ta.get_type()+9);
-	EXPECT_EQ(tc.get_type(), ta.get_type()+23);
+	EXPECT_EQ(tb.get_type(), ta.get_type() + 9);
+	EXPECT_EQ(tc.get_type(), ta.get_type() + 23);
 	EXPECT_EQ(tb.get_type(), tb2.get_type());
 	EXPECT_EQ(tc.get_type(), tc2.get_type());
 }
