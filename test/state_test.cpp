@@ -1,6 +1,10 @@
 #include <gtest/gtest.h>
 #include "State.h"
 
+std::vector<unsigned char> vec() {
+	return std::vector<unsigned char>({ 1, 1, 3, 4, 0, 0, 1, 4, 0, 1, 3, 4 });
+}
+
 Tube ta() {
 	return Tube({ 1, 1, 3, 4 });
 }
@@ -24,11 +28,15 @@ State createState() {
 TEST(State, constructor) {
 	State state = createState();
 	EXPECT_EQ(state.size(), 4);
+	auto vec_ = vec();
+	state = State(4, 3, vec_);
+	EXPECT_EQ(state.size(), 3);
 }
 
 TEST(State, to_vec) {
-	State state = createState();
-	EXPECT_EQ(state.to_vec(), std::vector<unsigned char>({1,1,3,4,0,0,1,4,0,1,3,4,0,1,3,4}));
+	auto vec_ = vec();
+	State state = State(4, 3, vec_);
+	EXPECT_EQ(state.to_vec(), vec_);
 }
 
 TEST(State, valid) {

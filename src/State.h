@@ -4,7 +4,9 @@
 
 class State {
 public:
-	State(std::vector<Tube> tubes_) : tubes(tubes_) {};
+	State(const std::vector<Tube>& tubes_) : tubes(tubes_) {};
+
+	State(size_t depth, size_t n_tubes, std::vector<unsigned char>& in_vec);
 
 	inline size_t size() const { return tubes.size(); }
 	

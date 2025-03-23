@@ -1,6 +1,19 @@
 #include <algorithm>
 #include "State.h"
 
+State::State(size_t depth, size_t n_tubes, std::vector<unsigned char>& in_vec) {
+	if (depth * n_tubes != in_vec.size()) {
+		throw std::invalid_argument("Invalid input vector size");
+	}
+	tubes.reserve(n_tubes);
+	for (size_t i = 0; i < n_tubes; ++i) {
+		std::vector<unsigned char> tube_vec;
+		tube_vec.reserve(depth);
+		tube_vec.insert(tube_vec.end(), in_vec.begin() + i * depth, in_vec.begin() + (i + 1) * depth);
+		tubes.push_back(Tube(tube_vec));
+	}
+}
+
 bool State::is_valid() const {
 	for (const auto& t : tubes) {
 		if (!t.valid()) {
