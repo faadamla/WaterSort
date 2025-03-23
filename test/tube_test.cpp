@@ -1,12 +1,22 @@
 #include <gtest/gtest.h>
 #include "Tube.h"
 
-// Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions) {
-	// Expect two strings not to be equal.
-	EXPECT_STRNE("hello", "world");
-	// Expect equality.
-	EXPECT_EQ(7 * 6, 42);
+TEST(Tube, constructor) {
+	std::vector<unsigned char> a{ 1, 2, 3, 4, 5 };
+	Tube ta{ a };
+	EXPECT_EQ(ta.size(), 5);
+}
+
+TEST(Tube, valid) {
+	std::vector<unsigned char> a{ 1, 2, 3, 4, 5 };
+	std::vector<unsigned char> b{ 0, 2, 3, 4, 5 };
+	std::vector<unsigned char> c{ 1, 0, 3, 4, 5 };
+	Tube ta{ a };
+	Tube tb{ b };
+	Tube tc{ c };
+	EXPECT_TRUE(ta.is_valid());
+	EXPECT_TRUE(tb.is_valid());
+	EXPECT_FALSE(tc.is_valid());
 }
 
 TEST(Tube, compare) {

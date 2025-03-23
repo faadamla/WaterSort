@@ -1,38 +1,7 @@
 #include "Tube.h"
 
-Tube Tube::equivalent() const
-{
-	std::map<unsigned char, unsigned char> color_map{ {0,0} };
-	unsigned char next_color = 1;
-	std::vector<unsigned char> eqiv;
-	for (const auto x : elements) {
-		if (color_map.count(x) == 0) {
-			color_map[x]= next_color;
-			++next_color;
-		}
-		eqiv.push_back(color_map[x]);
-	}
-	return { eqiv };
-}
 
-
-void Tube::fill_to(Tube& to) {
-    if (!can_fill_to(to)) {
-        return;
-    } else {
-        for (unsigned char i = 0; i < to.top_zeros; ++i) {
-            auto& from_elem = elements[top_zeros+i]; // Skip the zeros and start fill the first color out
-            if (from_elem == to.top_color && (to.top_zeros - 1) >= i)
-				{
-					to.elements[to.top_zeros - 1 - i] = from_elem;
-					from_elem = 0;
-				}
-        }
-		to.update();
-		update();
-		return;
-    }
-}
+std::map<Tube, size_t> Tube::type_map;
 
 bool Tube::is_valid() const
 {
@@ -51,6 +20,40 @@ bool Tube::is_valid() const
 		}
 	}
 	return true;
+}
+
+void Tube::fill_to(Tube& to) {
+	if (!can_fill_to(to)) {
+		return;
+	}
+	else {
+		for (unsigned char i = 0; i < to.top_zeros; ++i) {
+			auto& from_elem = elements[top_zeros + i]; // Skip the zeros and start fill the first color out
+			if (from_elem == to.top_color && (to.top_zeros - 1) >= i)
+			{
+				to.elements[to.top_zeros - 1 - i] = from_elem;
+				from_elem = 0;
+			}
+		}
+		to.update();
+		update();
+		return;
+	}
+}
+
+Tube Tube::equivalent() const
+{
+	std::map<unsigned char, unsigned char> color_map{ {0,0} };
+	unsigned char next_color = 1;
+	std::vector<unsigned char> eqiv;
+	for (const auto x : elements) {
+		if (color_map.count(x) == 0) {
+			color_map[x]= next_color;
+			++next_color;
+		}
+		eqiv.push_back(color_map[x]);
+	}
+	return { eqiv };
 }
 
 std::vector<std::vector<unsigned char>> Tube::generate_all_types(unsigned char depth)
@@ -84,7 +87,16 @@ std::vector<std::vector<unsigned char>> Tube::generate_all_types(unsigned char d
 
 size_t Tube::calc_type() const
 {
-	return 42;
+	auto equiv = equivalent();
+	/*if (type_map.count(equiv) == 0) {
+		auto new_types = generate_all_types(equiv.size());
+		auto next_index = std::max_element(type_map.begin(), type_map.end())->second + 1;
+		for (const auto& v : new_types) {
+			type_map[tube(v)] = next_index;
+			++next_index;
+		}
+	}*/
+	return type_map[equiv];
 }
 
 void Tube::update()
@@ -99,6 +111,8 @@ void Tube::update()
 			break;
 		}
 	}
+
+	type = calc_type();
 }
 
 std::ostream& operator<<(std::ostream& os, Tube const& tube)
