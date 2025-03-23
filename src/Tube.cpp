@@ -87,16 +87,17 @@ std::vector<std::vector<unsigned char>> Tube::generate_all_types(unsigned char d
 
 size_t Tube::calc_type() const
 {
-	auto equiv = equivalent();
-	/*if (type_map.count(equiv) == 0) {
+	return 42;
+	/*auto equiv = equivalent();
+	if (type_map.count(equiv) == 0) {
 		auto new_types = generate_all_types(equiv.size());
 		auto next_index = std::max_element(type_map.begin(), type_map.end())->second + 1;
 		for (const auto& v : new_types) {
-			type_map[tube(v)] = next_index;
+			type_map[Tube(v)] = next_index;
 			++next_index;
 		}
-	}*/
-	return type_map[equiv];
+	}
+	return type_map[equiv];*/
 }
 
 void Tube::update()

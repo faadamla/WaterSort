@@ -1,5 +1,5 @@
 #include <iostream>
-#include<Tube.h>
+#include "Tube.h"
 
 int main() {
 	auto all = Tube::generate_all_types(4);
@@ -29,6 +29,18 @@ int main() {
 	v2.reserve(100);
 	std::cout<< (v1 == v2 ? "EQUAL" : "NOT EQUAL");
 
+	std::cout << "========================================" << std::endl;
+
+	auto n1 = Tube::generate_all_types(1).size();
+	auto n2 = Tube::generate_all_types(2).size();
+	auto n3 = Tube::generate_all_types(3).size();
+	auto n4 = Tube::generate_all_types(4).size();
+	auto n5 = Tube::generate_all_types(5).size();
+	std::cout << n1 << std::endl;
+	std::cout << n2 << std::endl;
+	std::cout << n3 << std::endl;
+	std::cout << n4 << std::endl;
+	std::cout << n5 << std::endl;
 
 	return 0;
 }
