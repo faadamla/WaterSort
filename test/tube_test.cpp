@@ -62,10 +62,10 @@ TEST(Tube, equivalent) {
 	Tube tb{ b };
 	Tube tc{ c };
 	Tube td{ d };
-	EXPECT_EQ(ta.equivalent(), Tube({ 1,1,2,3,4 }));
-	EXPECT_EQ(tb.equivalent(), Tube({ 0,0,1,1,1 }));
-	EXPECT_EQ(tc.equivalent(), Tube({ 1,2,3,4,5 }));
-	EXPECT_EQ(td.equivalent(), Tube({ 1,2,3,4,5 }));
+	EXPECT_EQ(ta.equivalent(), std::vector<unsigned char>({ 1,1,2,3,4 }));
+	EXPECT_EQ(tb.equivalent(), std::vector<unsigned char>({ 0,0,1,1,1 }));
+	EXPECT_EQ(tc.equivalent(), std::vector<unsigned char>({ 1,2,3,4,5 }));
+	EXPECT_EQ(td.equivalent(), std::vector<unsigned char>({ 1,2,3,4,5 }));
 	EXPECT_EQ(tc.equivalent(), td.equivalent());
 }
 
@@ -80,4 +80,21 @@ TEST(Tube, all_types) {
 	EXPECT_EQ(n3, 9);
 	EXPECT_EQ(n4, 24);
 	EXPECT_EQ(n5, 76);
+}
+
+TEST(Tube, type) {
+	std::vector<unsigned char> a{ 0, 0, 0, 0};
+	std::vector<unsigned char> b{ 3, 3, 3, 3};
+	std::vector<unsigned char> c{ 1, 2, 3, 4};
+	std::vector<unsigned char> b2{ 4,4,4,4 };
+	std::vector<unsigned char> c2{ 7,1,5,4 };
+	Tube ta{ a };
+	Tube tb{ b };
+	Tube tc{ c };
+	Tube tb2{ b2 };
+	Tube tc2{ c2 };
+	EXPECT_EQ(tb.get_type(), ta.get_type()+9);
+	EXPECT_EQ(tc.get_type(), ta.get_type()+23);
+	EXPECT_EQ(tb.get_type(), tb2.get_type());
+	EXPECT_EQ(tc.get_type(), tc2.get_type());
 }

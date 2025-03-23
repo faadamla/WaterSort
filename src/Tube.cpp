@@ -1,7 +1,7 @@
 #include "Tube.h"
+#include <iostream>
 
-
-std::map<Tube, size_t> Tube::type_map;
+std::map<std::vector<unsigned char>, size_t> Tube::type_map;
 
 bool Tube::is_valid() const
 {
@@ -41,19 +41,19 @@ void Tube::fill_to(Tube& to) {
 	}
 }
 
-Tube Tube::equivalent() const
+std::vector<unsigned char> Tube::equivalent() const
 {
 	std::map<unsigned char, unsigned char> color_map{ {0,0} };
 	unsigned char next_color = 1;
 	std::vector<unsigned char> eqiv;
+	eqiv.reserve(size());
 	for (const auto x : elements) {
-		if (color_map.count(x) == 0) {
-			color_map[x]= next_color;
-			++next_color;
+		if (!color_map.contains(x)) {
+			color_map[x] = next_color++;
 		}
 		eqiv.push_back(color_map[x]);
 	}
-	return { eqiv };
+	return eqiv;
 }
 
 std::vector<std::vector<unsigned char>> Tube::generate_all_types(unsigned char depth)
@@ -63,41 +63,48 @@ std::vector<std::vector<unsigned char>> Tube::generate_all_types(unsigned char d
 		std::vector<std::vector<unsigned char>> current;
 		for (const auto& v : last) {
 			if (v.back() == 0) {
+				// if the previous is zero, only then we can continue with zero
 				std::vector<unsigned char> copy = v;
 				copy.push_back(0);
 				current.push_back(copy);
 			}
-			else {
-				const auto iter = std::max_element(v.begin(), v.end());
-				const unsigned char max = 1 + *iter;
-				for (unsigned char x = 0; x < max + 1; ++x) {
-					std::vector<unsigned char> copy = v;
-					copy.push_back(x);
-					current.push_back(copy);
-				}
+			const auto iter = std::max_element(v.begin(), v.end());
+			const unsigned char max = 1 + *iter;
+			for (unsigned char x = 1; x < max + 1; ++x) {
+				std::vector<unsigned char> copy = v;
+				copy.push_back(x);
+				current.push_back(copy);
 			}
+
 		}
 		last = current;
-	}
-	for (auto& v : last) {
-		std::reverse(v.begin(), v.end());
 	}
 	return last;
 }
 
 size_t Tube::calc_type() const
 {
-	return 42;
-	/*auto equiv = equivalent();
+	auto equiv = equivalent();
 	if (type_map.count(equiv) == 0) {
 		auto new_types = generate_all_types(equiv.size());
-		auto next_index = std::max_element(type_map.begin(), type_map.end())->second + 1;
+		auto it = std::max_element(type_map.begin(), type_map.end());
+		auto next_index = it == type_map.end() ? 0 : it->second + 1;
 		for (const auto& v : new_types) {
-			type_map[Tube(v)] = next_index;
-			++next_index;
+			type_map[v] = next_index++;
 		}
 	}
-	return type_map[equiv];*/
+	//return 42;
+	if (type_map.count(equiv) == 0) {
+		std::cout << "Error: type not found in map: ";
+		for (const auto x : equiv) {
+			std::cout << +x << " ";
+		}
+		std::cout << std::endl;
+		return -1;
+	}
+	else {
+		return type_map.at(equiv);
+	}
 }
 
 void Tube::update()
@@ -113,7 +120,7 @@ void Tube::update()
 		}
 	}
 
-	type = calc_type();
+	type = is_valid() ? calc_type() : -1;
 }
 
 std::ostream& operator<<(std::ostream& os, Tube const& tube)

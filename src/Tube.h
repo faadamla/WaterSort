@@ -18,7 +18,7 @@ public:
 	void fill_to(Tube& to);
 
 	size_t get_type() const { return type; };
-	Tube equivalent() const;
+	std::vector<unsigned char> equivalent() const;
 
 	static std::vector<std::vector<unsigned char>> generate_all_types(unsigned char depth);
 
@@ -37,9 +37,10 @@ private:
 	void update();
 
 	std::vector<unsigned char> elements;
+	static std::map<std::vector<unsigned char>, size_t> type_map;
+	// followings are updated by update():
 	unsigned char top_zeros;
 	unsigned char top_color;
-	static std::map<Tube, size_t> type_map;
 	size_t type;
 };
 
