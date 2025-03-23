@@ -18,6 +18,10 @@ public:
 	
 	State equiv() const;
 
+	bool finished() const;
+
+	std::vector<unsigned char> to_vec() const;
+
 
 	bool operator== (const State& other) const;
 	

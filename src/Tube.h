@@ -12,7 +12,11 @@ public:
 
 
 	size_t size() const { return elements.size(); }
-	bool is_valid()const;
+	bool valid()const;
+	bool empty() const;
+	bool finished() const;
+
+	std::vector<unsigned char> to_vec() const { return elements; }
 
 	bool can_fill_to(const Tube& to) const {
 		return to.top_zeros > 0 && to.top_color == top_color;
@@ -20,6 +24,7 @@ public:
 	void fill_to(Tube& to);
 
 	size_t get_type() const { return type; };
+	std::vector<unsigned char> equivalent(std::map<unsigned char, unsigned char>& color_map) const;
 	std::vector<unsigned char> equivalent() const;
 
 	static std::vector<std::vector<unsigned char>> generate_all_types(unsigned char depth);

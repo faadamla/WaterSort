@@ -3,7 +3,7 @@
 
 std::map<std::vector<unsigned char>, size_t> Tube::type_map;
 
-bool Tube::is_valid() const
+bool Tube::valid() const
 {
 	bool has_zero = false;
 	for (size_t i = 0; i < elements.size(); ++i) {
@@ -17,6 +17,27 @@ bool Tube::is_valid() const
 				has_zero = true;
 			}
 			else { continue; }
+		}
+	}
+	return true;
+}
+
+bool Tube::empty() const
+{
+	for (const auto x : elements) {
+		if (x != 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Tube::finished() const
+{
+	const auto color = elements[0];
+	for (const auto x : elements) {
+		if (x != color) {
+			return false;
 		}
 	}
 	return true;
@@ -41,10 +62,9 @@ void Tube::fill_to(Tube& to) {
 	}
 }
 
-std::vector<unsigned char> Tube::equivalent() const
+std::vector<unsigned char> Tube::equivalent(std::map<unsigned char, unsigned char>& color_map) const
 {
-	std::map<unsigned char, unsigned char> color_map{ {0,0} };
-	unsigned char next_color = 1;
+	unsigned char next_color = std::max_element(color_map.begin(), color_map.end())->second + 1;
 	std::vector<unsigned char> eqiv;
 	eqiv.reserve(size());
 	for (const auto x : elements) {
@@ -54,6 +74,13 @@ std::vector<unsigned char> Tube::equivalent() const
 		eqiv.push_back(color_map[x]);
 	}
 	return eqiv;
+
+}
+
+std::vector<unsigned char> Tube::equivalent() const
+{
+	std::map<unsigned char, unsigned char> color_map{ {0,0} };
+	return equivalent(color_map);
 }
 
 std::vector<std::vector<unsigned char>> Tube::generate_all_types(unsigned char depth)
@@ -120,7 +147,7 @@ void Tube::update()
 		}
 	}
 
-	type = is_valid() ? calc_type() : -1;
+	type = valid() ? calc_type() : -1;
 }
 
 std::ostream& operator<<(std::ostream& os, Tube const& tube)

@@ -11,6 +11,25 @@ TEST(Tube, constructor) {
 	EXPECT_EQ(ta.size(), 5);
 }
 
+TEST(Tube, to_vec) {
+	std::vector<unsigned char> a{ 0, 0, 0, 0 };
+	std::vector<unsigned char> b{ 3, 3, 3, 3 };
+	std::vector<unsigned char> c{ 1, 2, 3, 4 };
+	Tube ta{ a };
+	Tube tb{ b };
+	Tube tc{ c };
+
+	EXPECT_EQ(ta.to_vec(), a);
+	EXPECT_EQ(tb.to_vec(), b);
+	EXPECT_EQ(tc.to_vec(), c);
+	EXPECT_NE(ta.to_vec(), b);
+	EXPECT_NE(ta.to_vec(), c);
+	EXPECT_NE(tb.to_vec(), a);
+	EXPECT_NE(tb.to_vec(), c);
+	EXPECT_NE(tc.to_vec(), a);
+	EXPECT_NE(tc.to_vec(), b);
+}
+
 TEST(Tube, valid) {
 	std::vector<unsigned char> a{ 1, 2, 3, 4, 5 };
 	std::vector<unsigned char> b{ 0, 2, 3, 4, 5 };
@@ -18,9 +37,9 @@ TEST(Tube, valid) {
 	Tube ta{ a };
 	Tube tb{ b };
 	Tube tc{ c };
-	EXPECT_TRUE(ta.is_valid());
-	EXPECT_TRUE(tb.is_valid());
-	EXPECT_FALSE(tc.is_valid());
+	EXPECT_TRUE(ta.valid());
+	EXPECT_TRUE(tb.valid());
+	EXPECT_FALSE(tc.valid());
 }
 
 TEST(Tube, compare) {
@@ -97,4 +116,28 @@ TEST(Tube, type) {
 	EXPECT_EQ(tc.get_type(), ta.get_type() + 23);
 	EXPECT_EQ(tb.get_type(), tb2.get_type());
 	EXPECT_EQ(tc.get_type(), tc2.get_type());
+}
+
+TEST(Tube, empty) {
+	std::vector<unsigned char> a{ 0, 0, 0, 0 };
+	std::vector<unsigned char> b{ 3, 3, 3, 3 };
+	std::vector<unsigned char> c{ 1, 2, 3, 4 };
+	Tube ta{ a };
+	Tube tb{ b };
+	Tube tc{ c };
+	EXPECT_TRUE(ta.empty());
+	EXPECT_FALSE(tb.empty());
+	EXPECT_FALSE(tc.empty());
+}
+
+TEST(Tube, finished) {
+	std::vector<unsigned char> a{ 0, 0, 0, 0 };
+	std::vector<unsigned char> b{ 3, 3, 3, 3 };
+	std::vector<unsigned char> c{ 1, 2, 3, 4 };
+	Tube ta{ a };
+	Tube tb{ b };
+	Tube tc{ c };
+	EXPECT_TRUE(ta.finished());
+	EXPECT_TRUE(tb.finished());
+	EXPECT_FALSE(tc.empty());
 }

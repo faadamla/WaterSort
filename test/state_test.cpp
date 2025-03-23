@@ -54,3 +54,16 @@ TEST(State, fill_to) {
 	auto state5 = state.fill_to(2, 1);
 	EXPECT_EQ(state5, State({ ta(), Tube({0, 1, 1, 4}), Tube({0, 0, 3, 4}), tc()}));
 }
+
+TEST(State, equiv) {
+	State state = createState();
+	auto state2 = state.equiv();
+	EXPECT_EQ(state2, State({ Tube({ 0,0,1,2 }), Tube({ 0,1,3,2 }), Tube({ 0, 1,3,2 }), Tube({ 1,1,3,2 }) }));
+}
+
+TEST(State, finished) {
+	State state = createState();
+	EXPECT_FALSE(state.finished());
+	auto state2 = State({ Tube({ 0,0,0,0 }), Tube({ 1,1,1,1 }), Tube({ 1, 1,1,1 }), Tube({ 3,3,3,3 }) });
+	EXPECT_TRUE(state2.finished());
+}
