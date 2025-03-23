@@ -43,6 +43,17 @@ bool Tube::finished() const
 	return true;
 }
 
+size_t Tube::num_color_change() const
+{
+	size_t count = 0;
+	for (size_t i = 1; i < elements.size(); ++i) {
+		if (elements[i] != elements[i - 1]) {
+			++count;
+		}
+	}
+	return count;
+}
+
 void Tube::fill_to(Tube& to) {
 	if (!can_fill_to(to)) {
 		return;

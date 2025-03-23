@@ -6,7 +6,7 @@ class State {
 public:
 	State(const std::vector<Tube>& tubes_) : tubes(tubes_) {};
 
-	State(size_t depth, size_t n_tubes, std::vector<unsigned char>& in_vec);
+	State(size_t depth, size_t n_tubes, const std::vector<unsigned char>& in_vec);
 
 	inline size_t size() const { return tubes.size(); }
 	
@@ -22,8 +22,11 @@ public:
 
 	bool finished() const;
 
+	size_t num_color_change() const;
+
 	std::vector<unsigned char> to_vec() const;
 
+	static std::vector<State> generate_all_starts(size_t depth, size_t n_colored_tubes, size_t n_empty_tubes = 2);
 
 	bool operator== (const State& other) const;
 	

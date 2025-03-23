@@ -80,3 +80,13 @@ TEST(State, finished) {
 	auto state2 = State({ Tube({ 0,0,0,0 }), Tube({ 1,1,1,1 }), Tube({ 1, 1,1,1 }), Tube({ 3,3,3,3 }) });
 	EXPECT_TRUE(state2.finished());
 }
+
+TEST(State, generate_all_starts) {
+	auto states = State::generate_all_starts(4, 3);
+	EXPECT_EQ(states.size(), 5775);
+}
+
+TEST(State, num_color_change) {
+	State state = createState();
+	EXPECT_EQ(state.num_color_change(), 10);
+}

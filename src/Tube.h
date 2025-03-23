@@ -18,6 +18,8 @@ public:
 
 	std::vector<unsigned char> to_vec() const { return elements; }
 
+	size_t num_color_change() const;
+
 	bool can_fill_to(const Tube& to) const {
 		return to.top_zeros > 0 && to.top_color == top_color;
 	}

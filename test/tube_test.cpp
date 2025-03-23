@@ -141,3 +141,18 @@ TEST(Tube, finished) {
 	EXPECT_TRUE(tb.finished());
 	EXPECT_FALSE(tc.empty());
 }
+
+TEST(Tube, num_color_change) {
+	std::vector<unsigned char> a{ 0, 0, 0, 0 };
+	std::vector<unsigned char> b{ 3, 3, 3, 3 };
+	std::vector<unsigned char> c{ 1, 2, 2, 4 };
+	std::vector<unsigned char> d{ 1, 5, 3, 4, 5 };
+	Tube ta{ a };
+	Tube tb{ b };
+	Tube tc{ c };
+	Tube td{ d };
+	EXPECT_EQ(ta.num_color_change(), 0);
+	EXPECT_EQ(tb.num_color_change(), 0);
+	EXPECT_EQ(tc.num_color_change(), 2);
+	EXPECT_EQ(td.num_color_change(), 4);
+}
