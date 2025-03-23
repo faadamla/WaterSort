@@ -26,6 +26,11 @@ TEST(State, constructor) {
 	EXPECT_EQ(state.size(), 4);
 }
 
+TEST(State, to_vec) {
+	State state = createState();
+	EXPECT_EQ(state.to_vec(), std::vector<unsigned char>({1,1,3,4,0,0,1,4,0,1,3,4,0,1,3,4}));
+}
+
 TEST(State, valid) {
 	State state = createState();
 	EXPECT_TRUE(state.is_valid());

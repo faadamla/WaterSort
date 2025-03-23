@@ -47,7 +47,7 @@ std::vector<unsigned char> State::to_vec() const
 	for (const auto& t : tubes) {
 		size_ += t.size();
 	}
-	result.resize(size_);
+	result.reserve(size_);
 	for (const auto& t : tubes) {
 		result.append_range(t.to_vec());
 	}
