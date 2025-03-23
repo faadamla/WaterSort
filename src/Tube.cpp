@@ -1,4 +1,4 @@
-#include "../include/Tube.h"
+#include "Tube.h"
 
 Tube Tube::equivalent() const
 {
@@ -21,7 +21,7 @@ void Tube::fill_to(Tube& to) {
         return;
     } else {
         for (unsigned char i = 0; i < to.top_zeros; ++i) {
-            auto& from_elem = elements[top_zeros]; // Skip the zeros and start fill the first color out
+            auto& from_elem = elements[top_zeros+i]; // Skip the zeros and start fill the first color out
             if (from_elem == to.top_color && (to.top_zeros - 1) >= i)
 				{
 					to.elements[to.top_zeros - 1 - i] = from_elem;

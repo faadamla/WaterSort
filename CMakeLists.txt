@@ -1,28 +1,18 @@
-﻿# CMakeList.txt : CMake project for WaterSort, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.20)
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+project(WaterSort)
 
-project ("WaterSort")
+enable_testing()
 
-cmake_minimum_required(VERSION 3.20)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(include)
+add_subdirectory(src)
 
 # Add source to this project's executable.
-add_executable (WaterSort "WaterSort.cpp" "src/Tube.cpp")
-target_include_directories(WaterSort PRIVATE ${CMAKE_SOURCE_DIR}/include)
+add_executable (WaterSort "WaterSort.cpp")
+target_include_directories(WaterSort PRIVATE tube)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET WaterSort PROPERTY CXX_STANDARD 20)
-endif()
-
-# TODO: Add tests and install targets if needed.
+add_subdirectory(test)
